@@ -1,0 +1,35 @@
+version: '3.7'
+
+services:
+  product-management-compose:
+    build:
+     context: .
+    image: product-management-compose
+    ports:
+      - "8080:8080"
+    depends_on: 
+      - myapp
+    networks:
+      - my-web-application-network
+
+  myapp:
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: scott
+      MYSQL_PASSWORD: root
+      MYSQL_DATABASE: testdb
+    volumes:
+      - mysql-database-data-volume:/var/lib/mysql
+    networks:
+      - my-web-application-network  
+  
+# Volumes
+volumes:
+  mysql-database-data-volume:
+
+networks:
+  my-web-application-network:
